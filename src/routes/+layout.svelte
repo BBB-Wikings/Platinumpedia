@@ -13,7 +13,7 @@
 	} from 'flowbite-svelte';
 	import { auth, firestore, storage } from '$lib/firebase';
 	import { SearchOutline } from 'flowbite-svelte-icons';
-	import LoginModal from '$lib/components/LogInModal.svelte';
+	import LoginModal from '$lib/components/LoginModal.svelte';
 </script>
 
 <FirebaseApp {auth} {firestore} {storage}>

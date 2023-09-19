@@ -2,8 +2,8 @@
 	import { Button, Modal, Label, Input, Helper, Alert } from 'flowbite-svelte';
 	import { InfoCircleSolid } from 'flowbite-svelte-icons';
 	import { validateEmail, validatePassword } from '$lib/validation';
-	import type { validation } from '$lib/validation';
 	import { signInWithEmailAndPassword } from 'firebase/auth';
+	import type { validation } from '$lib/validation';
 	import { auth } from '$lib/firebase';
 
 	let email = '';
