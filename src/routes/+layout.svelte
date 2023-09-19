@@ -1,6 +1,6 @@
 <script lang="ts">
 	import '../app.css';
-	import { FirebaseApp, SignedIn, SignedOut } from "sveltefire";
+	import { FirebaseApp, SignedIn, SignedOut } from 'sveltefire';
 	import {
 		DarkMode,
 		Navbar,
@@ -10,17 +10,19 @@
 		NavLi,
 		Button,
 		Input
-	} from "flowbite-svelte";
+	} from 'flowbite-svelte';
 	import { auth, firestore, storage } from '$lib/firebase';
-	import { SearchOutline } from "flowbite-svelte-icons";
-	import LoginModal from "$lib/components/LogInModal.svelte";
+	import { SearchOutline } from 'flowbite-svelte-icons';
+	import LoginModal from '$lib/components/LogInModal.svelte';
 </script>
 
 <FirebaseApp {auth} {firestore} {storage}>
 	<header class="w-full bg-white dark:bg-slate-950">
 		<Navbar class="bg-gray-200 dark:bg-gray-800" let:hidden let:toggle>
 			<NavBrand href="/">
-				<span class="self-center whitespace-nowrap text-xl font-semibold dark:text-white">PlatinumPedia</span>
+				<span class="self-center whitespace-nowrap text-xl font-semibold dark:text-white"
+					>PlatinumPedia</span
+				>
 			</NavBrand>
 			<NavUl
 				{hidden}
@@ -40,7 +42,13 @@
 				</NavLi>
 			</NavUl>
 			<div class="flex items-center gap-2">
-				<Button color="none" data-collapse-toggle="mobile-menu-3" aria-controls="mobile-menu-3" aria-expanded="false" class="md:hidden text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5 mr-1">
+				<Button
+					color="none"
+					data-collapse-toggle="mobile-menu-3"
+					aria-controls="mobile-menu-3"
+					aria-expanded="false"
+					class="md:hidden text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5 mr-1"
+				>
 					<SearchOutline class="w-5 h-5" />
 				</Button>
 				<div class="hidden relative md:block">
@@ -51,11 +59,11 @@
 				</div>
 				<NavHamburger on:click={toggle} />
 
-				<SignedIn let:user let:signOut>
+				<SignedIn let:signOut>
 					<Button on:click={signOut}>Logout</Button>
 				</SignedIn>
 
-				<SignedOut let:auth>
+				<SignedOut>
 					<LoginModal />
 				</SignedOut>
 

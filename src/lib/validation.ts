@@ -1,9 +1,9 @@
-type validation = {
+export type validation = {
 	valid: boolean;
 	message: string;
 };
 
-type validations = {
+export type validations = {
 	[key: string]: validation;
 };
 
@@ -27,7 +27,7 @@ export function validateEmail(email: string): validations {
 
 export function validateEmptyInput(
 	input: string,
-	customMessage: string = 'Input cannot be empty.'
+	customMessage = 'Input cannot be empty.'
 ): validation {
 	const valid = input !== '';
 	const message = valid ? '' : customMessage;
