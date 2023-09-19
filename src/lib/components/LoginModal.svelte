@@ -1,8 +1,9 @@
 <script lang="ts">
   import { Button, Modal, Label, Input, Helper, Alert } from "flowbite-svelte";
+  import { InfoCircleSolid } from "flowbite-svelte-icons";
+  import { validateEmail, validatePassword } from "$lib/validation";
   import { signInWithEmailAndPassword } from 'firebase/auth';
   import { auth } from "$lib/firebase";
-  import { InfoCircleSolid } from "flowbite-svelte-icons";
 
   let formModal = false;
   let invalidLogin = false;
@@ -11,40 +12,29 @@
   let emailError:string|null = null;
   let passwordError:string|null = null;
 
-  function signIn(email, password) {
-    if (!validateEmail(email) || !validatePassword(password)) {
-      invalidLogin = false;
+  function signIn(email: string, password: string) {
+    const emailValidation = validateEmail(email);
+    const passwordValidation = validatePassword(password);
+
+    emailValidation.foreach((validation) => {
+      if (validation.valid !== true) {
+        emailError = validation.message;
+      }
+    });
+
+    passwordValidation.foreach((validation) => {
+      if (validation.valid !== true) {
+        passwordError += validation.message;
+      }
+    });
+
+    if (emailError !== null || passwordError !== null) {
       return;
     }
 
     signInWithEmailAndPassword(auth, email, password)
       .then(() => formModal = false)
       .catch(() => invalidLogin = true);
-  }
-
-  function validateEmail(email: string): boolean {
-    if (email === '') {
-      emailError = 'Please enter your email address.';
-      return false;
-    }
-
-    if (!email.includes('@')) {
-      emailError = 'Please enter a valid email address.';
-      return false;
-    }
-
-    emailError = null;
-    return true;
-  }
-
-  function validatePassword(password: string): boolean {
-    if (password === '') {
-      passwordError = 'Please enter your password.';
-      return false;
-    }
-
-    passwordError = null;
-    return true;
   }
 </script>
 
