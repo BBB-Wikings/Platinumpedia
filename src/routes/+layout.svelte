@@ -20,9 +20,11 @@
 	<header class="w-full bg-white dark:bg-slate-950">
 		<Navbar class="bg-gray-200 dark:bg-gray-800" let:hidden let:toggle>
 			<NavBrand href="/">
-				<span class="self-center whitespace-nowrap text-xl font-semibold dark:text-white"
-					>PlatinumPedia</span
+				<span
+					class="self-center whitespace-nowrap text-xl font-semibold dark:text-white"
 				>
+					PlatinumPedia
+				</span>
 			</NavBrand>
 			<NavUl
 				{hidden}

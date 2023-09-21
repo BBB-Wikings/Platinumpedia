@@ -1,9 +1,7 @@
 <script lang="ts">
 	import { Button, Modal, Label, Input, Helper, Alert } from 'flowbite-svelte';
 	import { InfoCircleSolid } from 'flowbite-svelte-icons';
-	import { validateEmail, validatePassword } from '$lib/validation';
 	import { signInWithEmailAndPassword } from 'firebase/auth';
-	import type { validation } from '$lib/validation';
 	import { auth } from '$lib/firebase';
 
 	let email = '';
@@ -14,21 +12,6 @@
 	let passwordError: string | null = null;
 
 	function signIn(email: string, password: string) {
-		const emailValidation = validateEmail(email);
-		const passwordValidation = validatePassword(password);
-
-		emailValidation.foreach((validation: validation) => {
-			if (validation.valid !== true) {
-				emailError = validation.message;
-			}
-		});
-
-		passwordValidation.foreach((validation: validation) => {
-			if (validation.valid !== true) {
-				passwordError += validation.message;
-			}
-		});
-
 		if (emailError !== null || passwordError !== null) {
 			return;
 		}
