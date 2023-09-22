@@ -1,16 +1,40 @@
 <script lang="ts">
-  import type { PageData } from "./$types.js";
-  import { superForm } from 'sveltekit-superforms/client';
+  import type { Message } from '$lib/formUtils';
+
   import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte';
+
+  import { setMessage, superForm, superValidateSync } from "sveltekit-superforms/client";
   import { Alert, Button, Helper, Input, Label } from "flowbite-svelte";
+  import { signInWithEmailAndPassword } from "firebase/auth";
   import { InfoCircleSolid } from "flowbite-svelte-icons";
+  import { loginSchema } from "$lib/formUtils";
+  import { auth } from "$lib/firebase";
+  import { goto } from "$app/navigation";
 
-  export let data: PageData;
-
-  const { form, errors, constraints, enhance } = superForm(data.form);
-  const invalidCredentials = data.invalidCredentials;
-
-  console.log(data);
+  const {
+    form,
+    errors,
+    constraints,
+    enhance,
+    message
+  } = superForm<typeof loginSchema, Message>(
+    superValidateSync(loginSchema), {
+      SPA: true,
+      validators: loginSchema,
+      async onUpdate({ form }) {
+        if (form.valid) {
+          try {
+            await signInWithEmailAndPassword(auth, form.data.email, form.data.password);
+            await goto('/');
+          } catch (error) {
+            setMessage(form, {
+              status: 'error',
+              text: 'Wrong email or password'
+            })
+          }
+        }
+      }
+  });
 </script>
 
 {#if import.meta.env.DEV}
@@ -39,7 +63,7 @@
       {/if}
     </Label>
     <Label class="space-y-2">
-      <Label for="password" class="block mb-2">Email</Label>
+      <Label for="password" class="block mb-2">Password</Label>
       <Input
         type="password"
         name="password"
@@ -55,11 +79,11 @@
       {/if}
     </Label>
 
-    {#if invalidCredentials}
+    {#if $message && $message.status === 'error'}
       <Alert border color="red">
         <InfoCircleSolid slot="icon" class="w-4 h-4" />
         <span class="font-medium">Error:</span>
-        Invalid Email or Password
+        {$message.text}
       </Alert>
     {/if}
     <div class="flex items-start">

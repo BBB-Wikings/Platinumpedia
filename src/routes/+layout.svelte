@@ -13,7 +13,6 @@
 	} from 'flowbite-svelte';
 	import { auth, firestore, storage } from '$lib/firebase';
 	import { SearchOutline } from 'flowbite-svelte-icons';
-	import LoginModal from '$lib/components/LoginModal.svelte';
 </script>
 
 <FirebaseApp {auth} {firestore} {storage}>
@@ -66,7 +65,7 @@
 				</SignedIn>
 
 				<SignedOut>
-					<LoginModal />
+					<Button href="/auth/login">Login</Button>
 				</SignedOut>
 
 				<DarkMode class="inline-block hover:text-primary" />
