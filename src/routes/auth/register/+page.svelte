@@ -1,14 +1,13 @@
 <script lang="ts">
   import type { Message } from '$lib/formUtils';
 
-  import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte';
-
   import { setMessage, superForm, superValidateSync } from "sveltekit-superforms/client";
-  import { signInWithEmailAndPassword } from "firebase/auth";
-  import { loginSchema } from "$lib/formUtils";
+  import { registerSchema } from "$lib/formUtils";
+  import { createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
   import { auth } from "$lib/firebase";
-  import { goto } from "$app/navigation";
+
   import FormMessage from "$lib/components/FormMessage.svelte";
+  import SuperDebug from "sveltekit-superforms/client/SuperDebug.svelte";
 
   const {
     form,
@@ -16,19 +15,32 @@
     constraints,
     enhance,
     message
-  } = superForm<typeof loginSchema, Message>(
-    superValidateSync(loginSchema), {
+  } = superForm<typeof registerSchema, Message>(
+    superValidateSync(registerSchema), {
       SPA: true,
-      validators: loginSchema,
+      validators: registerSchema,
       async onUpdate({ form }) {
         if (form.valid) {
           try {
-            await signInWithEmailAndPassword(auth, form.data.email, form.data.password);
-            await goto('/');
+            await createUserWithEmailAndPassword(auth, form.data.email, form.data.password);
           } catch (error) {
             setMessage(form, {
               status: 'error',
-              text: 'Wrong email or password'
+              text: 'Something went wrong. Please try again later.'
+            })
+          }
+
+          try {
+            await sendEmailVerification(auth.currentUser);
+            setMessage(form, {
+              status: 'success',
+              text: 'Please check your email for verification'
+            })
+          } catch (error) {
+            await auth.currentUser.delete();
+            setMessage(form, {
+              status: 'error',
+              text: 'Something went wrong. Please try again later.'
             })
           }
         }
@@ -73,7 +85,7 @@
       class="input"
       title="Input (password)"
       placeholder="password"
-      autocomplete="current-password"
+      autocomplete="new-password"
       aria-invalid={$errors.password ? 'true' : undefined}
       bind:value={$form.password}
       {...$constraints.password}
@@ -81,28 +93,26 @@
     {#if $errors.password}<span class="text-error-500">{$errors.password}</span>{/if}
   </label>
 
+  <label class="label my-4">
+    <span>Confirm your Password</span>
+    <input
+      id="confirmPassword"
+      type="password"
+      name="confirmPassword"
+      class="input"
+      title="Input (password)"
+      placeholder="password"
+      autocomplete="new-password"
+      aria-invalid={$errors.confirmPassword ? 'true' : undefined}
+      bind:value={$form.confirmPassword}
+      {...$constraints.confirmPassword}
+    />
+    {#if $errors.confirmPassword}<span class="text-error-500">{$errors.confirmPassword}</span>{/if}
+  </label>
+
   {#if $message}
     <FormMessage type="{$message.status}" message="{$message.text}"/>
   {/if}
 
-  <button class="btn variant-filled-primary w-full my-4">Login</button>
-
-  <div class="text-sm font-medium flex justify-between">
-    <span>
-      Not registered?
-      <a
-        href="/auth/register"
-        class="text-primary-500 hover:underline"
-      >
-        Create account
-      </a>
-    </span>
-
-    <a
-      href="/auth/forgot-password"
-      class="hover:underline text-primary-500"
-    >
-      Forgot password?
-    </a>
-  </div>
+  <button class="btn variant-filled-primary w-full my-4">Register</button>
 </form>

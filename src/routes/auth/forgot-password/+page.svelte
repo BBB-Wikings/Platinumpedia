@@ -1,81 +1,68 @@
 <script lang="ts">
-	import { SignedIn, SignedOut } from 'sveltefire';
-	import { Alert, Heading, Helper, Input, Label } from 'flowbite-svelte';
-	import { sendPasswordResetEmail } from 'firebase/auth';
-	import Container from '$lib/components/Container.svelte';
-	import { auth } from '$lib/firebase.js';
-	import { InfoCircleSolid } from 'flowbite-svelte-icons';
+  import type { Message } from '$lib/formUtils';
 
-	let email = '';
-	let emailError = '';
-	let emailSent = false;
+  import { setMessage, superForm, superValidateSync } from "sveltekit-superforms/client";
+  import { forgotPasswordSchema } from "$lib/formUtils";
+  import { sendPasswordResetEmail } from 'firebase/auth';
+  import { auth } from "$lib/firebase";
 
-	function sendPasswordReset(email: string) {
-		if (!validateEmail(email)) {
-			return null;
-		}
+  import FormMessage from "$lib/components/FormMessage.svelte";
 
-		sendPasswordResetEmail(auth, email).finally(() => (emailSent = true));
-	}
-
-	function validateEmail(email: string): boolean {
-		if (email === '') {
-			emailError = 'Please enter your email address.';
-			return false;
-		}
-
-		if (!email.includes('@')) {
-			emailError = 'Please enter a valid email address.';
-			return false;
-		}
-
-		emailError = '';
-		return true;
-	}
+  const {
+    form,
+    errors,
+    constraints,
+    enhance,
+    message
+  } = superForm<typeof forgotPasswordSchema, Message>(
+    superValidateSync(forgotPasswordSchema), {
+      SPA: true,
+      validators: forgotPasswordSchema,
+      async onUpdate({ form }) {
+        if (form.valid) {
+          try {
+            await sendPasswordResetEmail(auth, form.data.email);
+            setMessage(form, {
+              status: 'success',
+              text: 'An email has been sent to you with instructions on how to reset your password.'
+            })
+          } catch (error) {
+            setMessage(form, {
+              status: 'error',
+              text: 'Error sending email'
+            })
+          }
+        }
+      }
+    });
 </script>
+<h1 class="h1">Forgot Password</h1>
 
-<Container width="w-5/12">
-	<Heading tag="h1" class="mb-4" customSize="text-3xl font-bold">Forgot Passwort</Heading>
-	<SignedIn>
-		<Alert border>
-			<InfoCircleSolid slot="icon" class="w-4 h-4" />
-			<p>You are logged in please reset youre password in the <a href="/">Profile Page</a></p>
-		</Alert>
-	</SignedIn>
+<form method="post" class="px-8 py-4" use:enhance>
+  <label class="label my-4">
+    <span>Enter your email</span>
+    <input
+      id="email"
+      type="email"
+      name="email"
+      class="input"
+      title="Input (email)"
+      placeholder="john@example.com"
+      autocomplete="email"
+      autofocus
+      aria-invalid={$errors.email ? 'true' : undefined}
+      bind:value={$form.email}
+      {...$constraints.email}
+    />
+    {#if $errors.email}<span class="text-error-500">{$errors.email}</span>{/if}
+  </label>
 
-	<SignedOut>
-		<div class="flex flex-col justify-between gap-3">
-			<div>
-				<Label class="block mb-2"
-					>Please enter the email of your account. We will send you and email with a password reset
-					link.</Label
-				>
-				<Input
-					label="Email"
-					id="email"
-					name="email"
-					required
-					placeholder="email@example.com"
-					bind:value={email}
-				/>
-				{#if emailError}
-					<Helper color="red" class="text-sm mt-2">
-						{emailError}
-					</Helper>
-				{/if}
-			</div>
-			{#if emailSent}
-				<Alert border color="green">
-					<InfoCircleSolid slot="icon" class="w-4 h-4" />
-					Email sent if account exists.
-				</Alert>
-			{/if}
-			<button
-				class="w-full bg-primary-600 hover:bg-primary-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-				on:click={() => sendPasswordReset(email)}
-			>
-				Reset Password
-			</button>
-		</div>
-	</SignedOut>
-</Container>
+  {#if $message}
+    <FormMessage type="{$message.status}" message="{$message.text}"/>
+  {/if}
+
+  <button class="btn variant-filled-primary w-full my-4">
+    Get password reset email
+  </button>
+</form>
+
