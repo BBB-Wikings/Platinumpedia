@@ -5,43 +5,59 @@
 	// Floating UI for Popups
 	import { computePosition, autoUpdate, flip, shift, offset, arrow } from '@floating-ui/dom';
 	import { storePopup } from '@skeletonlabs/skeleton';
+	import { auth, firestore } from "$lib/firebase";
+	import { FirebaseApp, SignedIn, SignedOut } from "sveltefire";
 	storePopup.set({ computePosition, flip, shift, offset, arrow });
 </script>
 
-<!-- App Shell -->
-<AppShell>
-	<svelte:fragment slot="header">
-		<!-- App Bar -->
-		<AppBar>
-			<svelte:fragment slot="lead">
-				<a href="/">
-					<strong class="text-xl uppercase">
-						Platinumpedia
-					</strong>
-				</a>
-			</svelte:fragment>
+<FirebaseApp {auth} {firestore}>
+	<!-- App Shell -->
+	<AppShell>
+		<svelte:fragment slot="header">
+			<!-- App Bar -->
+			<AppBar>
+				<svelte:fragment slot="lead">
+					<a href="/">
+						<strong class="text-xl uppercase">
+							Platinumpedia
+						</strong>
+					</a>
+				</svelte:fragment>
 
-			<div class="container flex w-full gap-3">
-				<a href="/">
-					Home
-				</a>
-				<a href="/">
-					Profile
-				</a>
-			</div>
+				<div class="container flex w-full gap-3">
+					<a href="/">
+						Home
+					</a>
+					<a href="/">
+						Profile
+					</a>
+				</div>
 
-			<svelte:fragment slot="trail">
-				<a
-					class="btn btn-sm variant-ghost-primary"
-					href="/auth/login"
-				>
-					Login
-				</a>
-				<LightSwitch />
-			</svelte:fragment>
-		</AppBar>
-	</svelte:fragment>
-	<div class="container p-10 mx-auto">
-		<slot />
-	</div>
-</AppShell>
+				<svelte:fragment slot="trail">
+					<SignedOut let:auth>
+						<a
+							class="btn btn-sm variant-ghost-primary"
+							href="/auth/login"
+						>
+							Login
+						</a>
+					</SignedOut>
+
+					<SignedIn let:user let:signOut>
+						<span>{user.email}</span>
+						<button
+							class="btn btn-sm variant-ghost-primary"
+							on:click={signOut}>
+							Sign Out
+						</button>
+					</SignedIn>
+
+					<LightSwitch />
+				</svelte:fragment>
+			</AppBar>
+		</svelte:fragment>
+		<div class="container p-10 mx-auto">
+			<slot />
+		</div>
+	</AppShell>
+</FirebaseApp>
