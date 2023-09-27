@@ -26,3 +26,18 @@ export const registerSchema = z
 export const forgotPasswordSchema = z.object({
 	email: z.string().email()
 });
+
+export const resetPasswordSchema = z
+	.object({
+		password: z.string().min(8),
+		confirmPassword: z.string().min(8)
+	})
+	.superRefine(({ confirmPassword, password }, ctx) => {
+		if (password !== confirmPassword) {
+			ctx.addIssue({
+				code: z.ZodIssueCode.custom,
+				message: 'Passwords do not match',
+				path: ['confirmPassword']
+			});
+		}
+	});
