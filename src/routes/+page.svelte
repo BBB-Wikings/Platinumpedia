@@ -1,4 +1,4 @@
-<h1 class="h1"><span class="gradient-heading">Skeleton H1</span></h1>
+<h1 class="h1"><span class="gradient-heading">Platinumpedia</span></h1>
 
 <p class="px-8 py-4">
 	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut

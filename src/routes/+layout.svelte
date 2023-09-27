@@ -3,7 +3,7 @@
 	import { AppShell, AppBar, LightSwitch } from '@skeletonlabs/skeleton';
 	import { computePosition, autoUpdate, flip, shift, offset, arrow } from '@floating-ui/dom';
 	import { storePopup } from '@skeletonlabs/skeleton';
-	import { auth, firestore, storage } from "$lib/firebase";
+	import { auth, firestore, storage } from '$lib/firebase';
 	import { FirebaseApp, SignedIn, SignedOut } from 'sveltefire';
 
 	storePopup.set({ computePosition, flip, shift, offset, arrow });

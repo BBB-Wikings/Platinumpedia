@@ -25,14 +25,21 @@
 						});
 					}
 
-					try {
-						await sendEmailVerification(auth.currentUser);
-						setMessage(form, {
-							status: 'success',
-							text: 'Please check your email for verification'
-						});
-					} catch (error) {
-						await auth.currentUser.delete();
+					if (auth.currentUser) {
+						try {
+								await sendEmailVerification(auth.currentUser);
+							setMessage(form, {
+								status: 'success',
+								text: 'Please check your email for verification'
+							});
+						} catch (error) {
+							await auth.currentUser.delete();
+							setMessage(form, {
+								status: 'error',
+								text: 'Something went wrong. Please try again later.'
+							});
+						}
+					} else {
 						setMessage(form, {
 							status: 'error',
 							text: 'Something went wrong. Please try again later.'

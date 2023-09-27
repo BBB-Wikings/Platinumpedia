@@ -1,8 +1,8 @@
-<script>
+<script lang="ts">
 	import { uppercaseFirstLetter } from '$lib/textUtils';
 	import { fade } from 'svelte/transition';
 
-	export let message;
+	export let message: string;
 	export let type = 'info';
 </script>
 
