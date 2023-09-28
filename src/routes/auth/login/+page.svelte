@@ -1,12 +1,12 @@
 <script lang="ts">
-	import type { Message } from '$lib/formUtils';
+	import type { Message } from '$lib/utils/formUtils';
 
 	import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte';
 
 	import { setMessage, superForm, superValidateSync } from 'sveltekit-superforms/client';
 	import { signInWithEmailAndPassword } from 'firebase/auth';
-	import { loginSchema } from '$lib/formUtils';
-	import { auth } from '$lib/firebase';
+	import { loginSchema } from '$lib/utils/formUtils';
+	import { auth } from '$lib/firebase/firebase';
 	import { goto } from '$app/navigation';
 	import FormMessage from '$lib/components/FormMessage.svelte';
 

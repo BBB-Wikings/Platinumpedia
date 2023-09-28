@@ -1,10 +1,10 @@
 <script lang="ts">
-	import type { Message } from '$lib/formUtils';
+	import type { Message } from '$lib/utils/formUtils';
 
 	import { setMessage, superForm, superValidateSync } from 'sveltekit-superforms/client';
-	import { registerSchema } from '$lib/formUtils';
+	import { registerSchema } from '$lib/utils/formUtils';
 	import { createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
-	import { auth } from '$lib/firebase';
+	import { auth } from '$lib/firebase/firebase';
 
 	import FormMessage from '$lib/components/FormMessage.svelte';
 	import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte';

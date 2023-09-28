@@ -2,7 +2,7 @@
 	import ErrorAlert from "$lib/components/ErrorAlert.svelte";
 
 	import { page } from '$app/stores';
-	import { getStatusMessage } from '$lib/errorUtils';
+	import { getStatusMessage } from '$lib/utils/errorUtils';
 </script>
 
 <ErrorAlert

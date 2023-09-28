@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { uppercaseFirstLetter } from '$lib/textUtils';
+	import { variantGhostClass } from "$lib/utils/CssClassUtils";
+	import { uppercaseFirstLetter } from '$lib/utils/textUtils';
 	import { fade } from 'svelte/transition';
-	import { variantGhostClass } from "$lib/CssClassUtils";
 
 	export let message: string;
 	export let type = 'primary';

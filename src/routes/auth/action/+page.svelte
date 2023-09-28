@@ -2,12 +2,12 @@
 	import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte';
 
 	import type { PageData } from './$types';
-	import type { Message } from '$lib/formUtils';
-	import type { handlerResponse } from '$lib/firebaseActionHandler';
+	import type { Message } from '$lib/utils/formUtils';
+	import type { handlerResponse } from '$lib/firebase/firebaseActionHandler';
 
 	import { error } from '@sveltejs/kit';
-	import { resetPasswordSchema } from '$lib/formUtils';
-	import { handleResetPassword, HandlerType } from '$lib/firebaseActionHandler';
+	import { resetPasswordSchema } from '$lib/utils/formUtils';
+	import { handleResetPassword, HandlerType } from '$lib/firebase/firebaseActionHandler';
 	import { superForm, superValidateSync } from 'sveltekit-superforms/client';
 	import LoadingAlert from '$lib/components/LoadingAlert.svelte';
 	import ErrorAlert from '$lib/components/ErrorAlert.svelte';
