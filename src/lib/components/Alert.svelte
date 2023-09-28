@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { variantGhostClass, variantGlassClass } from "$lib/CssClassUtils";
+	import { variantGhostClass, variantGlassClass } from "$lib/utils/CssClassUtils";
 
 	let title: string = 'Alert';
 	let message: string = 'This is an alert message.';
