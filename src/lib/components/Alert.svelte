@@ -1,24 +1,25 @@
 <script lang="ts">
-	import { variantGhostClass, variantGlassClass } from "$lib/utils/CssClassUtils";
+	import { variantGhostClass, variantGlassClass, Variant } from "$lib/utils/CssClassUtils";
 
-	let title: string = 'Alert';
+	let title: string = '';
 	let message: string = 'This is an alert message.';
-	let action: string = '/';
-	let actionText: string = 'Home';
-	let color: string = 'error';
-	let classes: string = '';
-	let icon: string = 'bxs:error';
+	let action: string = '';
+	let actionText: string = '';
+	let color: Variant = Variant.Primary;
+	let icon: string = 'mdi:alert-circle';
 
-	export { title, message, action, actionText, color, classes, icon };
+	export { title, message, action, actionText, color, icon };
 </script>
 
-<aside class="alert {variantGhostClass(color)} {classes}">
+<aside class="alert {variantGhostClass(color)} my-4">
 	<div class="text-7xl">
 		<iconify-icon {icon} />
 	</div>
 
 	<div class="alert-message">
-		<h1 class="h1">{title}</h1>
+		{#if title}
+			<h2 class="h2">{title}</h2>
+		{/if}
 		<p>{message}</p>
 	</div>
 

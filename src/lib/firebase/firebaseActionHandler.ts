@@ -1,5 +1,5 @@
 import { confirmPasswordReset, verifyPasswordResetCode } from 'firebase/auth';
-import { auth } from '$lib/firebase';
+import { auth } from '$lib/firebase/firebase';
 
 export enum HandlerType {
 	RESET_PASSWORD,

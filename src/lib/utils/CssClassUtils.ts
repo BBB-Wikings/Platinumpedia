@@ -1,35 +1,45 @@
-export function variantGhostClass(color: string) {
+export enum Variant {
+	Primary = 'primary',
+	Secondary = 'secondary',
+	Tertiary = 'tertiary',
+	Success = 'success',
+	Warning = 'warning',
+	Error = 'error',
+	Surface = 'surface'
+}
+
+export function variantGhostClass(color: Variant) {
 	switch (color) {
-		case 'secondary':
+		case Variant.Secondary:
 			return 'variant-ghost-secondary';
-		case 'tertiary':
+		case Variant.Tertiary:
 			return 'variant-ghost-tertiary';
-		case 'success':
+		case Variant.Success:
 			return 'variant-ghost-success';
-		case 'warning':
+		case Variant.Warning:
 			return 'variant-ghost-warning';
-		case 'error':
+		case Variant.Error:
 			return 'variant-ghost-error';
-		case 'surface':
+		case Variant.Surface:
 			return 'variant-ghost-surface';
 		default:
 			return 'variant-ghost-primary';
 	}
 }
 
-export function variantGlassClass(color: string) {
+export function variantGlassClass(color: Variant) {
 	switch (color) {
-		case 'secondary':
+		case Variant.Secondary:
 			return 'variant-glass-secondary';
-		case 'tertiary':
+		case Variant.Tertiary:
 			return 'variant-glass-tertiary';
-		case 'success':
+		case Variant.Success:
 			return 'variant-glass-success';
-		case 'warning':
+		case Variant.Warning:
 			return 'variant-glass-warning';
-		case 'error':
+		case Variant.Error:
 			return 'variant-glass-error';
-		case 'surface':
+		case Variant.Surface:
 			return 'variant-glass-surface';
 		default:
 			return 'variant-glass-primary';

@@ -1,10 +1,16 @@
 <script lang="ts">
+	import Alert from "$lib/components/Alert.svelte";
+
 	import '../app.postcss';
 	import { AppShell, AppBar, LightSwitch } from '@skeletonlabs/skeleton';
 	import { computePosition, autoUpdate, flip, shift, offset, arrow } from '@floating-ui/dom';
 	import { storePopup } from '@skeletonlabs/skeleton';
 	import { auth, firestore, storage } from '$lib/firebase/firebase';
 	import { FirebaseApp, SignedIn, SignedOut } from 'sveltefire';
+	import { getFlash } from 'sveltekit-flash-message';
+	import { page } from '$app/stores';
+
+	const flash = getFlash(page);
 
 	storePopup.set({ computePosition, flip, shift, offset, arrow });
 </script>
@@ -21,7 +27,10 @@
 
 				<div class="container flex w-full gap-3">
 					<a href="/"> Home </a>
-					<a href="/"> Profile </a>
+
+					<SignedIn let:user let:signOut>
+						<a href="/profile"> Profile </a>
+					</SignedIn>
 				</div>
 
 				<svelte:fragment slot="trail">
@@ -39,6 +48,9 @@
 			</AppBar>
 		</svelte:fragment>
 		<div class="container p-10 mx-auto">
+			{#if $flash}
+				<Alert message="{$flash.message}" color="{$flash.type}"/>
+			{/if}
 			<slot />
 		</div>
 	</AppShell>

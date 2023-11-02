@@ -56,7 +56,7 @@
 <h1 class="h1">{title}</h1>
 
 {#await handler}
-	<LoadingAlert message="We are processing your request." classes="my-4" />
+	<LoadingAlert message="We are processing your request." />
 {:then response}
 	{#if response.type === HandlerType.RESET_PASSWORD}
 		<form method="post" class="px-8 py-4" use:enhance>
@@ -111,7 +111,6 @@
 			message="Your password has been reset successfully."
 			action="/auth/login"
 			actionText="Go to login"
-			classes="my-4"
 		/>
 	{/if}
 {:catch error}
@@ -119,6 +118,5 @@
 		message={error.message}
 		action={error.actionUrl}
 		actionText={error.actionText}
-		classes="my-4"
 	/>
 {/await}

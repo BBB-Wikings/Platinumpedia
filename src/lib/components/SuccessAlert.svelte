@@ -1,20 +1,20 @@
 <script lang="ts">
 	import Alert from '$lib/components/Alert.svelte';
+	import { Variant } from "$lib/utils/CssClassUtils";
 
+	let title: string = 'Success';
 	let message: string = '';
 	let action: string = '';
 	let actionText: string = '';
-	let classes: string = '';
 
-	export { message, action, actionText, classes };
+	export { title, message, action, actionText };
 </script>
 
 <Alert
+	{title}
 	{message}
-	{classes}
 	{action}
 	{actionText}
-	title="Success"
-	color="success"
+	color="{Variant.Success}"
 	icon="bxs:check-circle"
 />
